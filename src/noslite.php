@@ -16,9 +16,11 @@ foreach($rss->channel->item as $item) {
   $id = strip_id($item->link);
   $list_items .= '<li><a href="l/' . $id. '.html">' . $item->title . '</a></li>';
 
-  file_put_contents(__DIR__ . '/../site/l/' . $id . '.html', render_article($item->title, $item->description));
+  file_put_contents(__DIR__ . '/../site/l/' . $id . '.html', render_article($item->title, $item->description, $item->link));
 }
 $list_items .= '</ul>';
 
-file_put_contents(__DIR__ . '/../site/index.html', render_index('Laatste update: ' . date("H:i"), $list_items));
+$footer = 'Laatste update: ' . date('H:i') . '. Bron: <a href="https://nos.nl/">nos.nl</a>';
+
+file_put_contents(__DIR__ . '/../site/index.html', render_index($footer, $list_items));
 
