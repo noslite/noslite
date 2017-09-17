@@ -47,7 +47,7 @@ function render_article(string $title, string $content) : string {
   </style>
 </head>
 <body>
-  <header><a href="../">Terug</a> $title</header>
+  <header><a href="/">Terug</a> | $title</header>
   <main>
     $content
   </main>
