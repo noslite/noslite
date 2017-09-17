@@ -17,8 +17,6 @@ function render_index(string $header, string $content) {
       font-size: 1.6em;
       line-height: 1.5;
       font-family: Helvetica,sans-serif;
-      background: snow;
-      color: #333;
     }
     p, ul {
       font-size: 1em;
