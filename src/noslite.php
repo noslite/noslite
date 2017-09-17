@@ -20,5 +20,5 @@ foreach($rss->channel->item as $item) {
 }
 $list_items .= '</ul>';
 
-file_put_contents(__DIR__ . '/../site/index.html', render_index('Laatste update: ', $list_items));
+file_put_contents(__DIR__ . '/../site/index.html', render_index('Laatste update: ' . date("H:i:s"), $list_items));
 
