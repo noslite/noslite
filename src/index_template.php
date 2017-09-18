@@ -15,6 +15,7 @@ function render_index(string $header, string $content) {
   <main>$content</main>
   <footer>$header</footer>
 </body>
+<script>"serviceWorker"in navigator&&navigator.serviceWorker.register("s.js");</script>
 </html>
 EOT;
 }

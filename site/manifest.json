@@ -25,5 +25,6 @@
   ],
   "start_url": "index.html?launcher=true",
   "background_color": "#FFF",
-  "theme_color": "#d02527"
+  "theme_color": "#d02527",
+  "display": "minimal-ui"
 }
