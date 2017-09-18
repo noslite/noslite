@@ -1,2 +1,3 @@
 site/**/*.html
 .DS_Store
+site/**/*.gz

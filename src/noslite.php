@@ -15,12 +15,16 @@ $list_items = '<strong>Algemeen nieuws</strong><ul>';
 foreach($rss->channel->item as $item) {
   $id = strip_id($item->link);
   $list_items .= '<li><a href="l/' . $id. '.html">' . $item->title . '</a></li>';
-
-  file_put_contents(__DIR__ . '/../site/l/' . $id . '.html', render_article($item->title, $item->description, $item->link));
+  $filename = __DIR__ . '/../site/l/' . $id . '.html';
+  $article = render_article($item->title, $item->description, $item->link);
+  file_put_contents($filename, $article);
+  file_put_contents($filename . '.gz', gzencode($article, 9));
 }
 $list_items .= '</ul>';
 
 $footer = 'Laatste update: ' . date('H:i') . '. Bron: <a href="https://nos.nl/">nos.nl</a>';
-
-file_put_contents(__DIR__ . '/../site/index.html', render_index($footer, $list_items));
+$site = render_index($footer, $list_items);
+$site_file = __DIR__ . '/../site/index.html';
+file_put_contents($site_file, $site);
+file_put_contents($site_file . '.gz', gzencode($site, 9));
 
