@@ -15,6 +15,7 @@ function render_article(string $title, string $content, string $url) : string {
   <main>$content<p><a href="$url">Bron</a></p></main>
   <footer>$title <a href="/" class="b">Terug</a></footer>
 </body>
+<script>"serviceWorker"in navigator&&navigator.serviceWorker.register("/s.js");</script>
 </html>
 EOT;
 }
