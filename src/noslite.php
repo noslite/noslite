@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+date_default_timezone_set('Europe/Amsterdam');
+
 const URL = 'http://feeds.nos.nl/nosnieuwsalgemeen';
 
 final class Unavailable extends Exception {}
