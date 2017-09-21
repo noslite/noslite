@@ -1,0 +1,19 @@
+{% htmlcompress %}
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#d02527">
+    <title>{{ title | raw }} - NOS lite</title>
+    <style>{% include 'article.css' %}</style>
+  </head>
+  <body>
+    <main>
+      {{ content | raw }}
+      <p><a href="{{ external_link }}">Bron</a></p>
+    </main>
+    <footer>{{ title | raw }} <a href="/" class="b">Terug</a></footer>
+  </body>
+</html>
+{% endhtmlcompress %}

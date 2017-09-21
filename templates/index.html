@@ -1,0 +1,23 @@
+{% htmlcompress %}
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#d02527">
+    <title>NOS lite</title>
+    <style>{% include 'index.css' %}</style>
+  </head>
+  <body>
+    <main>
+      <strong>Algemeen nieuws</strong>
+      <ul>
+      {% for item in items %}
+        <li><a href="{{ item.internal_link }}">{{ item.title | raw }}</a></li>
+      {% endfor %}
+      </ul>
+    </main>
+    <footer>Laatste update: {{ now | date('H:i') }}. Bron: <a href="https://nos.nl/">nos.nl</a></footer>
+  </body>
+</html>
+{% endhtmlcompress %}

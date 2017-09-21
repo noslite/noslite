@@ -1,0 +1,6 @@
+{
+    "require": {
+        "twig/twig": "^2.0",
+        "nochso/html-compress-twig": "^2.0"
+    }
+}

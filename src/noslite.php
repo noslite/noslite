@@ -1,30 +1,89 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once(__DIR__ . '/index_template.php');
-require_once(__DIR__ . '/article_template.php');
+const URL = 'http://feeds.nos.nl/nosnieuwsalgemeen';
 
-function strip_id(string $id) : string {
-  // Remove [http://nos.nl/l/]2193163
-  return substr($id, 16);
+final class Unavailable extends Exception {}
+
+function path(string $path) : string {
+  return __DIR__ . '/..' . $path;
 }
 
-$string = file_get_contents('http://feeds.nos.nl/nosnieuwsalgemeen');
-$rss = new SimpleXMLElement($string);
+function strip_id(string $str) : string {
+  // Removes http://nos.nl/l/
+  $id = substr($str, 16);
 
-$list_items = '<strong>Algemeen nieuws</strong><ul>';
-foreach($rss->channel->item as $item) {
-  $id = strip_id($item->link);
-  $list_items .= '<li><a href="l/' . $id. '.html">' . $item->title . '</a></li>';
-  $filename = __DIR__ . '/../site/l/' . $id . '.html';
-  $article = render_article($item->title, $item->description, $item->link);
-  file_put_contents($filename, $article);
-  file_put_contents($filename . '.gz', gzencode($article, 9));
+  if (empty($id) || !is_numeric($id)) {
+    throw new Unavailable('Something wrong with the id');
+  }
+
+  return $id;
 }
-$list_items .= '</ul>';
 
-$footer = 'Laatste update: ' . date('H:i') . '. Bron: <a href="https://nos.nl/">nos.nl</a>';
-$site = render_index($footer, $list_items);
-$site_file = __DIR__ . '/../site/index.html';
-file_put_contents($site_file, $site);
-file_put_contents($site_file . '.gz', gzencode($site, 9));
+function internal_link(string $id) : string {
+  return '/l/' . $id . '.html';
+}
 
+function safe_get_contents(string $url) : string {
+  $contents = file_get_contents($url);
+
+  if ($contents === false) {
+    throw new Unavailable($url);
+  }
+
+  return $contents;
+}
+
+function safe_xml_element(string $string) : SimpleXMLElement {
+  libxml_use_internal_errors(true);
+  try {
+    return new SimpleXMLElement($string);
+  } catch(Exception $e) {
+    libxml_clear_errors();
+    throw new Unavailable($e->getMessage());
+  }
+}
+
+function parse_feed(SimpleXMLElement $rss) : array {
+  $as_array = [];
+
+  foreach($rss->channel->item as $item) {
+    $id = strip_id($item->link);
+     
+    $as_array[] = [
+      'id' => $id,
+      'internal_link' => internal_link($id),
+      'external_link' => $item->link,
+      'title' => trim($item->title),
+      'content' => $item->description
+    ];
+  }
+
+  return $as_array;
+}
+
+function persist(string $path, string $data) {
+  file_put_contents($path, $data);
+  file_put_contents($path . '.gz', gzencode($data, 9));
+}
+
+$loader = new Twig_Loader_Filesystem(path('/templates'));
+$twig = new Twig_Environment($loader, [
+  'cache' => path('/cache/compiled_templates'),
+]);
+$twig->addExtension(new \nochso\HtmlCompressTwig\Extension());
+
+$contents = safe_get_contents(URL);
+$items = parse_feed(safe_xml_element($contents));
+
+persist(
+  path('/site/index.html'),
+  $twig->render('index.html', ['items' => $items])
+);
+
+foreach ($items as $item) {
+  persist(
+    path('/site' . $item['internal_link']),
+    $twig->render('article.html', $item)
+  );
+}
