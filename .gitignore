@@ -3,3 +3,4 @@ site/**/*.html
 site/**/*.gz
 vendor/
 cache/
+logs/
