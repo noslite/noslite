@@ -12,8 +12,8 @@ function path(string $path) : string {
 }
 
 function strip_id(string $str) : string {
-  // Removes http://nos.nl/l/
-  $id = substr($str, 16);
+  // Removes https://nos.nl/l/
+  $id = substr($str, 17);
 
   if (empty($id) || !is_numeric($id)) {
     throw new Unavailable('Something wrong with the id');
