@@ -35,3 +35,18 @@ ul {
 li {
     padding-bottom: 10px
 }
+
+@media (prefers-color-scheme: dark) {
+    html, 
+    body {
+        background: #2F3236;
+        color: #A3ABBB
+    }
+    footer {
+        border-top: 1px solid #5F6674;
+        color: #5F6674
+    }
+    a {
+        color: #6EA1FF
+    }
+}
