@@ -1,6 +1,3 @@
 site/**/*.html
-.DS_Store
 site/**/*.gz
-vendor/
-cache/
-logs/
+.DS_Store
